@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Calculator Display</title>
+    <script defer>
+      function render(output, value) {
+        const uses = [];
+
+        for (const char of value) {
+          if (!/^[0-9]$/.test(char)) {
+            continue;
+          }
+
+          const use = document.createElementNS(
+            "http://www.w3.org/2000/svg",
+            "use"
+          );
+
+          use.setAttribute("href", `#d${char}`);
+          use.setAttribute("transform", `translate(${uses.length * 12}, 0)`);
+          uses.push(use);
+        }
+
+        output.replaceChildren(...uses);
+        svg.setAttribute("viewBox", `0,0,${uses.length * 12},18`);
+      }
+
+      function main() {
+        const input = document.getElementById("input");
+        const svg = document.getElementById("svg");
+        const output = document.getElementById("output");
+        const flipButton = document.getElementById("flip-button");
+
+        render(output, input.value);
+        input.addEventListener("input", () => render(output, input.value));
+        form.addEventListener("submit", (event) => {
+          event.preventDefault();
+          render(output, input.value);
+        });
+
+        let isFlipped = false;
+        flipButton.addEventListener("click", () => {
+          isFlipped = !isFlipped;
+          if (isFlipped) {
+            svg.classList.add("flipped");
+          } else {
+            svg.classList.remove("flipped");
+          }
+          flipButton.setAttribute("aria-pressed", `${isFlipped}`);
+        });
+      }
+
+      document.addEventListener("DOMContentLoaded", main);
+    </script>
+
+    <style>
+      svg {
+        display: block;
+        margin-block: 1em;
+        height: 2em;
+        transition: transform 0.5s;
+      }
+
+      svg.flipped {
+        transform-origin: center;
+        transform: rotate(180deg);
+      }
+    </style>
+  </head>
+
+  <body>
+    <form id="form">
+      <label>
+        Enter digits 0-9
+        <input id="input" inputmode="numeric" />
+      </label>
+    </form>
+
+    <svg id="svg" viewBox="0,0,0,18">
+      <defs>
+        <path id="lt" d="M2,1l1,-1h4l1,1,-1,1h-4z" />
+        <path id="lru" d="M9,2l1,1v4l-1,1,-1,-1v-4z" />
+        <path id="lrb" d="M9,10l1,1v4l-1,1,-1,-1v-4z" />
+        <path id="lc" d="M2,9l1,-1h4l1,1,-1,1h-4z" />
+        <path id="lb" d="M2,17l1,-1h4l1,1,-1,1h-4z" />
+        <path id="llb" d="M1,10l1,1v4l-1,1,-1,-1v-4z" />
+        <path id="llu" d="M1,2l1,1v4l-1,1,-1,-1v-4z" />
+
+        <g id="d0">
+          <use href="#lt" />
+          <use href="#lru" />
+          <use href="#lrb" />
+          <use href="#lb" />
+          <use href="#llu" />
+          <use href="#llb" />
+        </g>
+
+        <g id="d1">
+          <use href="#lru" />
+          <use href="#lrb" />
+        </g>
+
+        <g id="d2">
+          <use href="#lt" />
+          <use href="#lru" />
+          <use href="#lc" />
+          <use href="#llb" />
+          <use href="#lb" />
+        </g>
+
+        <g id="d3">
+          <use href="#lt" />
+          <use href="#lru" />
+          <use href="#lrb" />
+          <use href="#lc" />
+          <use href="#lb" />
+        </g>
+
+        <g id="d4">
+          <use href="#lru" />
+          <use href="#lrb" />
+          <use href="#lc" />
+          <use href="#llu" />
+        </g>
+
+        <g id="d5">
+          <use href="#lt" />
+          <use href="#lrb" />
+          <use href="#lc" />
+          <use href="#lb" />
+          <use href="#llu" />
+        </g>
+
+        <g id="d6">
+          <use href="#lt" />
+          <use href="#lrb" />
+          <use href="#lc" />
+          <use href="#lb" />
+          <use href="#llb" />
+          <use href="#llu" />
+        </g>
+
+        <g id="d7">
+          <use href="#lt" />
+          <use href="#lru" />
+          <use href="#lrb" />
+        </g>
+
+        <g id="d8">
+          <use href="#lt" />
+          <use href="#lru" />
+          <use href="#lrb" />
+          <use href="#lc" />
+          <use href="#lb" />
+          <use href="#llu" />
+          <use href="#llb" />
+        </g>
+
+        <g id="d9">
+          <use href="#lt" />
+          <use href="#lru" />
+          <use href="#lrb" />
+          <use href="#lc" />
+          <use href="#lb" />
+          <use href="#llu" />
+        </g>
+      </defs>
+
+      <g>
+        <g id="output" />
+        <use
+          href="#output"
+          transform="rotate(180) translate(2, 24)"
+          transform-origin="center"
+        />
+      </g>
+    </svg>
+
+    <button id="flip-button" aria-pressed="false">Rotate</button>
+  </body>
+</html>
